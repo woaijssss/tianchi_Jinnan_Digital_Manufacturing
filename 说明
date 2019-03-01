@@ -1,0 +1,24 @@
+1、json标注中的keys说明：
+（1）images：
+（2）annotations： 每个图像的注释（image_id对应与"images"中的id）
+    {
+      "id": 1,              // 序号
+      "image_id": 0,        // 对应于"images"中的id
+      "category_id": 1,     // 对应于"categories"中的id
+      "iscrowd": 0,         // 是否是人群？（待确认）
+      "segmentation": [     // 初赛为空
+
+      ],
+      "area": [             // 初赛为空
+
+      ],
+      "bbox": [             // 图像中危险品大致的位置信息
+        388.0,              // x
+        207.0,              // y
+        53.0,               // width
+        56.0                // height
+      ]
+    }
+（3）info：        该标注文件的描述性信息
+（4）categories：  类别信息（类别id和对应的类别名称）
+（5）licenses：
