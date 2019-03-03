@@ -2,8 +2,10 @@
 import json
 import cv2
 
+dir_name = "../jinnan2_round1_train_20190222/"
+
 def imageTest(json_str):
-    img_file = "../restricted/190118_202347_00164778.jpg"
+    img_file = "../jinnan2_round1_train_20190222/restricted/190118_202347_00164778.jpg"
     img = cv2.imread(img_file)
     
     print(img.shape)
