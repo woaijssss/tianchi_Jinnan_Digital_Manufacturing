@@ -4,7 +4,54 @@ import numpy as np
 import argparse
 import cv2
 
+def test():
+    filename = "E:\比赛\tianchi\tianchi_Jinnan_Digital_Manufacturing\datas\test_pictures\category_id_1_feature_gray\190109_182654_00154240.jpg".replace('\\', "\\\\")
+    print(filename)
+    img = cv2.imread(filename)
+    print(img)
+    quit()
+
+
+def edge(img):
+    # 高斯模糊,降低噪声
+    blurred = cv2.GaussianBlur(img, (3, 3), 0)
+    # 灰度图像
+    gray = cv2.cvtColor(blurred, cv2.COLOR_RGB2GRAY)
+    # 图像梯度
+    xgrad = cv2.Sobel(gray, cv2.CV_16SC1, 1, 0)
+    ygrad = cv2.Sobel(gray, cv2.CV_16SC1, 0, 1)
+    # 计算边缘
+    # 50和150参数必须符合1：3或者1：2
+    edge_output = cv2.Canny(xgrad, ygrad, 50, 150)
+
+    return edge_output
+    # 图一
+    # cv2.imshow("edge", edge_output)
+    #
+    # dst = cv2.bitwise_and(img, img, mask=edge_output)
+    # # 图二（彩色）
+    # cv2.imshow('cedge', dst)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+class CompareImage():
+
+    def compare_image(self, path_image1, path_image2):
+
+        # imageA = cv2.imread(path_image1)
+        # imageB = cv2.imread(path_image2)
+
+        # grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
+        # grayB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)
+        from skimage.measure import compare_ssim
+
+        (score, diff) = compare_ssim(path_image1, path_image2, full=True)
+        print("SSIM: {}".format(score))
+        return score
+
 if __name__ == '__main__':
+    print(cv2.getVersionString())
+    quit()
     pic_name = "../datas/category_id_1/190119_175805_00166370.jpg"
     img = cv2.imread(pic_name)  # 读取图片
 
@@ -50,16 +97,16 @@ if __name__ == '__main__':
         # target是把原图中的非目标颜色区域去掉剩下的图像
         target = cv2.bitwise_and(img, img, mask=dilation)
 
-        for i in range(0, 255):
-            # 将滤波后的图像变成二值图像放在binary中
-            ret, binary = cv2.threshold(dilation, 0, i, cv2.THRESH_BINARY)
-    
-            # 在binary中发现轮廓，卢阔按照面积从小到大排列
-            binary, contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # dilation = edge(img)
 
-            if len(contours) == 1:
-                break
-            
+        # for i in range(1, 255):
+        # 将滤波后的图像变成二值图像放在binary中
+        ret, binary = cv2.threshold(dilation, 0, 10, cv2.THRESH_BINARY)
+
+        # 在binary中发现轮廓，卢阔按照面积从小到大排列
+        # binary, contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
         p = 0
         # print(len(contours))
         for i in contours:  # 遍历所有的轮廓
@@ -70,6 +117,12 @@ if __name__ == '__main__':
             font = cv2.FONT_HERSHEY_SIMPLEX
             cv2.putText(img, str(p), (x-10, y+10), font, 1, (0, 0, 255), 2)     # 加减10是调整字符位置
             p += 1
+
+            img_tmp = img[y:y + h, x:x + w]
+            ci = CompareImage()
+            print(img.shape)
+            print(img_tmp.shape)
+            # ci.compare_image(img_tmp, img)
 
         cv2.imshow('target', target)
         cv2.imshow('Mask', mask)

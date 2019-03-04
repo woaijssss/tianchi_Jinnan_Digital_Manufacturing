@@ -2,6 +2,8 @@
 import json
 import cv2
 
+import src.utils as utils
+
 dir_name = '../datas/category_id_2/'
 
 def imageCorrection(image_map, category_id_name):
@@ -24,8 +26,10 @@ def imageCorrection(image_map, category_id_name):
     # img_tmp = frame_gray[0:frame_gray.shape[0], 0:frame_gray.shape[1]]
     
     # cv2.rectangle(frame_gray, (x, y), (x+w, y+h), color, thickness=2)
-    
-    cv2.imwrite("../datas/" + category_id_name + "_feature_gray/" + image_map['file_name'], img_tmp)
+
+    directory = "../datas/" + category_id_name + "_feature_gray/"
+    utils.mkdir(directory)
+    cv2.imwrite(directory + image_map['file_name'], img_tmp)
     
     # cv2.imshow('image_', frame_gray)
     # cv2.imshow('image1', img_tmp)

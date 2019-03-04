@@ -2,8 +2,19 @@
 from lib.DataSetHandling import DataSet
 from lib.ModelFit import CNNModel
 
+import src.utils as utils
+
+'''
+    将category_id_1_featrue_gray和category_id_2_featrue_gray这两个目录，拷贝到test_picture目录下
+    该程序自动创建test_picture
+'''
+
 if __name__ == '__main__':
-    data_set = DataSet('../../datas/test_pictures')
+    directory = '../../datas/test_pictures'
+
+    utils.mkdir(directory)
+
+    data_set = DataSet(directory)
     data_set.load()
     
     model = CNNModel()
@@ -18,3 +29,5 @@ if __name__ == '__main__':
     '''
     model.trainModel(data_set)
     model.saveModel()
+
+    model.evaluate(data_set)

@@ -10,6 +10,12 @@ __pycache__/
 *.xml
 */*.xml
 
+# CNN model
+*/*.h5
+*/*/*.h5
+
+datas/
+
 # Distribution / packaging
 .Python
 build/

@@ -40,7 +40,8 @@ labels = []
 def readPath(path):
 	for dir_item in os.listdir(path):
 		# 从初始路径开始叠加，合并成可识别的操作路径
-		full_path = os.path.abspath(os.path.join(path, dir_item))
+		# full_path = os.path.abspath(os.path.join(path, dir_item))
+		full_path = path + '/' + dir_item
 		if os.path.isdir(full_path):	# 如果是文件夹，继续递归调用
 			readPath(full_path)
 		else:	# 文件

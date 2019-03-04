@@ -2,6 +2,8 @@
 import json
 import cv2
 
+import src.utils as utils
+
 '''
     将训练集目录下restricted所有category_id为0的图像取出，放入./datas/category_id_1目录中；
     并提取json标注中的对应部分，保存在 datas/category_id_1.json 中
@@ -33,8 +35,6 @@ def getFeatureMap(json_str, category_id):
             feature_map[id][0] = image_file
     
     return feature_map
-        
-    
 
 if __name__ == '__main__':
     # 仅修改这个值，对应到特征id即可
@@ -63,7 +63,10 @@ if __name__ == '__main__':
         obj["w"] = info[3]
         obj["h"] = info[4]
         ci1_map["images"].append(obj)
-        shutil.copy(dir_name + "/restricted/" + info[0], "../../datas/" + category_id_name + "/")
+
+        directory = "../../datas/" + category_id_name + "/"
+        utils.mkdir(directory)
+        shutil.copy(dir_name + "/restricted/" + info[0], directory)
         
     j_str = json.dumps(ci1_map)
     print(str(j_str))
