@@ -9,8 +9,7 @@ import cv2
 
 dir_name = "../../../jinnan2_round1_train_20190222"
 
-def getFeatureMap(json_str):
-    category_id = 1
+def getFeatureMap(json_str, category_id):
     feature_map = {}
     
     images = json_str['images']
@@ -38,6 +37,10 @@ def getFeatureMap(json_str):
     
 
 if __name__ == '__main__':
+    # 仅修改这个值，对应到特征id即可
+    category_id = 2
+    category_id_name = "category_id_" + str(category_id)
+    
     filename = dir_name + "/train_no_poly.json"
     
     with open(filename, 'r') as fd:
@@ -45,7 +48,7 @@ if __name__ == '__main__':
     
     json_str = json.loads(line)
 
-    feature_map = getFeatureMap(json_str)
+    feature_map = getFeatureMap(json_str, category_id)
     # print(feature_map)
     
     ci1_map = {"images":[]}
@@ -60,10 +63,10 @@ if __name__ == '__main__':
         obj["w"] = info[3]
         obj["h"] = info[4]
         ci1_map["images"].append(obj)
-        shutil.copy(dir_name + "/restricted/" + info[0], "../../datas/category_id_1/")
+        shutil.copy(dir_name + "/restricted/" + info[0], "../../datas/" + category_id_name + "/")
         
     j_str = json.dumps(ci1_map)
     print(str(j_str))
     
-    with open("../../datas/category_id_1.json", "w+") as fd:
+    with open("../../datas/" + category_id_name + ".json", "w+") as fd:
         fd.write(str(j_str))

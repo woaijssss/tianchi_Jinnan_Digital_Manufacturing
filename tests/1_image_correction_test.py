@@ -2,9 +2,9 @@
 import json
 import cv2
 
-dir_name = '../datas/category_id_1/'
+dir_name = '../datas/category_id_2/'
 
-def imageCorrection(image_map):
+def imageCorrection(image_map, category_id_name):
     img_file = dir_name + image_map['file_name']
     color = (0, 255, 0)
     x = int(image_map['x'])
@@ -25,7 +25,7 @@ def imageCorrection(image_map):
     
     # cv2.rectangle(frame_gray, (x, y), (x+w, y+h), color, thickness=2)
     
-    cv2.imwrite("../datas/category_id_1_feature_gray/" + image_map['file_name'], img_tmp)
+    cv2.imwrite("../datas/" + category_id_name + "_feature_gray/" + image_map['file_name'], img_tmp)
     
     # cv2.imshow('image_', frame_gray)
     # cv2.imshow('image1', img_tmp)
@@ -37,11 +37,16 @@ def imageCorrection(image_map):
     #         quit()
 
 if __name__ == '__main__':
-    filename = '../datas/category_id_1.json'
+    # 仅修改这个值，对应到特征id即可
+    category_id = 2
+    category_id_name = "category_id_" + str(category_id)
+    
+    
+    filename = '../datas/' + category_id_name + '.json'
     
     with open(filename, 'r', encoding='utf-8') as f:
         json_str = json.load(f)
         
         for i in range(0, len(json_str['images'])):
             image_1_map = json_str['images'][i]
-            imageCorrection(image_1_map)
+            imageCorrection(image_1_map, category_id_name)
