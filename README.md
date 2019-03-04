@@ -32,7 +32,11 @@
 ### 二分类器训练过程  
 - 根据annotations中的category_id，将其中一个类别取出，单独训练  
 ```python
-（1）将训练集目录下restricted所有category_id为0的图像取出，放入./datas/category_id_1目录中  
-（2）
+（1）将训练集目录下restricted所有category_id为0的图像取出，放入./datas/category_id_1目录中；  
+（2）统计这类图像的特征；
+（3）按照annotations中的图像位置，取出指定位置的图像，并将形状转化成方形；
+（4）搭建CNN网络训练模型；
+（5）使用AUC评价模型；
+（6）使用测试集中所有图像进行测试
 
 ```
