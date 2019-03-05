@@ -4,7 +4,7 @@ import cv2
 
 import src.utils as utils
 
-dir_name = '../datas/category_id_2/'
+dir_name = '../datas/category_id_1/'
 
 def imageCorrection(image_map, category_id_name):
     img_file = dir_name + image_map['file_name']
@@ -15,8 +15,8 @@ def imageCorrection(image_map, category_id_name):
     h = int(image_map['h'])
     
     img = cv2.imread(img_file)
-    frame_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-
+    # frame_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    frame_gray = img
     # x = max(x, y)
     # w = max(w, h)
     # y = x
@@ -42,7 +42,7 @@ def imageCorrection(image_map, category_id_name):
 
 if __name__ == '__main__':
     # 仅修改这个值，对应到特征id即可
-    category_id = 2
+    category_id = 1
     category_id_name = "category_id_" + str(category_id)
     
     

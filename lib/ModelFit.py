@@ -41,23 +41,17 @@ class CNNModel:
 		self.model.add(Activation('relu'))					# 激活函数层
 
 		##########################################################################
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
+		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		# self.model.add(Activation('relu'))					# 激活函数层
+		# self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
+		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		# self.model.add(Activation('relu'))					# 激活函数层
+		# self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
+		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		# self.model.add(Activation('relu'))					# 激活函数层
+		# self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
+		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		# self.model.add(Activation('relu'))					# 激活函数层
 		##########################################################################
 
 		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
@@ -72,7 +66,7 @@ class CNNModel:
 		self.model.add(Activation('relu'))					# 激活函数层
 		self.model.add(Dropout(0.5))							# Dropout层
 		self.model.add(Dense(nb_classes))						# Dense层
-		self.model.add(Activation('sigmoid'))					# 分类层，输出最终结果
+		self.model.add(Activation('softmax'))					# 分类层，输出最终结果
 
 		# 输出模型的情况
 		'''
