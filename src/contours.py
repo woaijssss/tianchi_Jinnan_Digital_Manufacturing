@@ -34,13 +34,11 @@ def targetDetect(img, threshold=(0, 255)):
         
         kernel = np.ones((3, 3), np.uint8)  # 3*3卷积核
         
-        HSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  # 把BGR图像转换为HSV格式
-        
         '''
             RGB图像过滤通道
         '''
-        lower = np.array([40, 30, 0])  # 要识别颜色的下限
-        upper = np.array([210, 230, 210])  # 要识别颜色的上限
+        lower = np.array([50, 100, 10])  # 要识别颜色的下限
+        upper = np.array([220, 200, 200])  # 要识别颜色的上限
         
         # mask是把HSV图片中在颜色范围内的区域变成白色，其他区域变成黑色
         mask = cv2.inRange(img, lower, upper)

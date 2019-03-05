@@ -28,23 +28,22 @@ if __name__ == '__main__':
     
     # dir_name = "../../jinnan2_round1_test_a_20190222/"
     dir_name = "../datas/category_id_1/"
-    pic = dir_name + "190122_182038_00169899.jpg"
+    pic = dir_name + "190119_174829_00166214.jpg"
     img = cv2.imread(pic)
     # 高斯滤波,降低噪声
     blur = cv2.GaussianBlur(img, (3, 3), 0)
 
-    contours_set = contours.targetDetect(img, (150, 255))
+    contours_set = contours.targetDetect(img, (100, 255))
     
     # imgShow(img, contours_set[0])
 
     for c in contours_set:
         x, y, w, h = cv2.boundingRect(c)
         img_tmp = blur[y:y+h+10, x:x+w+10]
-        
-        id = model.facePredict(img_tmp)
-        
-        if not id:
-            imgShow(img, c)
-            break
+
+        id, result = model.facePredict(img_tmp)
+
+        # if id == 0 and result[0] > result[1]:
+        imgShow(img, c)
             
         

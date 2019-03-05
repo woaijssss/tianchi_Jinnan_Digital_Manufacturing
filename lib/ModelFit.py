@@ -176,10 +176,10 @@ class CNNModel:
 		print('result: ', result)
 
 		# 给出类别预测：0或1
-		result = self.model.predict_classes(image)
+		id = self.model.predict_classes(image)
 
 		# 返回类别预测结果
-		return result[0]
+		return id, result[0]
 
 if __name__ == '__main__':
 	from src.DataSetHandling import DataSet
