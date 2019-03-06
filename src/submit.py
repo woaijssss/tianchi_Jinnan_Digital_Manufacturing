@@ -1,5 +1,4 @@
 
-
 import os
 import json
 import src.utils as utils
@@ -38,7 +37,7 @@ class Submit:
         dict_tmp["3"] = prob_lst[2]
         dict_tmp["4"] = prob_lst[3]
         dict_tmp["5"] = prob_lst[4]
-        self.submit_json[image] = dict_tmp
+        self.submit_json[img_name] = dict_tmp
 
     def get(self):
         return json.dumps(self.submit_json)
@@ -51,27 +50,27 @@ if __name__ == '__main__':
     dir_name = "../../jinnan2_round1_test_a_20190222/"
     submit = Submit()
     image_lst = submit.getAllPictures(dir_name)[0]
-    
+
     for image in image_lst:
         pic = dir_name + image
         img = cv2.imread(pic)
         # 高斯滤波,降低噪声
         blur = cv2.GaussianBlur(img, (3, 3), 0)
         contours_set = contours.targetDetect(img, (100, 255))
-        
+
         # imgShow(img, contours_set[0])
-        
+
         if contours_set is None:
             continue
-            
+
         for c in contours_set:
             x, y, w, h = cv2.boundingRect(c)
             img_tmp = blur[y:y + h + 10, x:x + w + 10]
-            
+
             # id, result = model.facePredict(img_tmp)
-            
+
             # imgShow(img, c)
-            
+
             # submit_json = json.dumps(submit_json)
             submit.getSubmitJson(image)
 

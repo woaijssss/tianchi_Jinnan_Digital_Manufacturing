@@ -160,7 +160,7 @@ class CNNModel:
 	'''
 	这个函数是提供给外部模块使用的，外部模块用它来预测哪个是“我”，哪个不是“我”。
 	'''
-	def facePredict(self, image):
+	def predict(self, image):
 		# 依然是根据后端系统确定维度顺序
 		if K.image_dim_ordering() == 'th'\
 			and image.shape != (1, 3, IMAGE_SIZE, IMAGE_SIZE):
