@@ -28,8 +28,18 @@ def imageCorrection(image_map, category_id_name):
         if c & 0xFF == ord('q'):
             quit()
 
+def test():
+    labels = [1, 2, 1, 3, 4, 5, 6, 7, 8]
+    
+    import numpy as np
+    labels = np.array([0 if label == 1 else 1 for label in labels])
+    print(labels.shape)
+    
+    quit()
 
 if __name__ == '__main__':
+    test()
+    
     # 仅修改这个值，对应到特征id即可
     category_id = 1
     category_id_name = "category_id_" + str(category_id)

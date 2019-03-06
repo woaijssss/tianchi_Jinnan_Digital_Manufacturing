@@ -34,7 +34,7 @@ class DataSet:
 	（4）归一化图像数据
 	'''
 	def load(self, img_rows = IMAGE_SIZE, img_cols = IMAGE_SIZE,
-			 img_channels = 3, nb_classes = 2):
+			 img_channels = 3, nb_classes = 5):
 		# 加载数据集到内存
 		images, labels = loadDataSet(self.path)
 

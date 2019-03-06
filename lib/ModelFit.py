@@ -16,7 +16,7 @@ class CNNModel:
 		self.model = None
 
 	# 建立模型
-	def buildModel(self, data_set, nb_classes = 2):
+	def buildModel(self, data_set, nb_classes = 5):
 		print('===>:', data_set.input_shape)
 		# 构建一个空的网络模型，它是一个线性堆叠模型，各神经网络层会被顺序添加
 		# 专称：序贯模型或线性堆叠模型:多个网络层的线性堆叠，也就是“一条路走到黑”。
@@ -32,7 +32,7 @@ class CNNModel:
 		self.model.add(Activation('relu'))					# 激活函数层
 
 		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Dropout(0.25))							# Dropout层
+		# self.model.add(Dropout(0.25))							# Dropout层
 
 		self.model.add(Conv2D(64, (3, 3), padding='same'))	# 2维卷积层
 		self.model.add(Activation('relu'))					# 激活函数层
@@ -41,28 +41,28 @@ class CNNModel:
 		self.model.add(Activation('relu'))					# 激活函数层
 
 		##########################################################################
-		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		# self.model.add(Activation('relu'))					# 激活函数层
-		# self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		# self.model.add(Activation('relu'))					# 激活函数层
-		# self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		# self.model.add(Activation('relu'))					# 激活函数层
-		# self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		# self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		# self.model.add(Activation('relu'))					# 激活函数层
+		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		self.model.add(Activation('relu'))					# 激活函数层
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
+		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		self.model.add(Activation('relu'))					# 激活函数层
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
+		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		self.model.add(Activation('relu'))					# 激活函数层
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
+		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
+		self.model.add(Activation('relu'))					# 激活函数层
 		##########################################################################
 
 		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Dropout(0.25))							# Dropout层
+		# self.model.add(Dropout(0.25))							# Dropout层
 
 		'''
 		flatten:是把池化层展开以便作为全连接层的输入。
 		"展开"即：指的是将一个(m, n)的池化后的矩阵，转化为(m*n, 1)的矩阵。
 		'''
 		self.model.add(Flatten())								# Flatten层(拉伸操作，相当于FC的输入层)
-		self.model.add(Dense(512))								# Dense层，又称为(FC)全连接层
+		self.model.add(Dense(1024))								# Dense层，又称为(FC)全连接层
 		self.model.add(Activation('relu'))					# 激活函数层
 		self.model.add(Dropout(0.5))							# Dropout层
 		self.model.add(Dense(nb_classes))						# Dense层
@@ -128,6 +128,10 @@ class CNNModel:
 
 			# 计算整个训练样本集的数量以用于特征值归一化、ZCA白化等处理
 			datagen.fit(data_set.train_images)
+
+			print(data_set.valid_images.shape)
+			print(data_set.valid_labels.shape)
+			print(data_set.valid_labels)
 
 			# 利用生成器开始训练模型
 			self.model.fit_generator(

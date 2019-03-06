@@ -4,7 +4,9 @@ import cv2
 
 import src.utils as utils
 
-dir_name = '../datas/category_id_1/'
+# 仅修改这个值，对应到特征id即可
+category_id = 5
+dir_name = '../datas/category_id_' + str(category_id) + '/'
 
 def imageCorrection(image_map, category_id_name):
     img_file = dir_name + image_map['file_name']
@@ -27,7 +29,7 @@ def imageCorrection(image_map, category_id_name):
     
     # cv2.rectangle(frame_gray, (x, y), (x+w, y+h), color, thickness=2)
 
-    directory = "../datas/" + category_id_name + "_feature_gray/"
+    directory = "../datas/" + category_id_name + "_feature/"
     utils.mkdir(directory)
     cv2.imwrite(directory + image_map['file_name'], img_tmp)
     
@@ -41,8 +43,6 @@ def imageCorrection(image_map, category_id_name):
     #         quit()
 
 if __name__ == '__main__':
-    # 仅修改这个值，对应到特征id即可
-    category_id = 1
     category_id_name = "category_id_" + str(category_id)
     
     

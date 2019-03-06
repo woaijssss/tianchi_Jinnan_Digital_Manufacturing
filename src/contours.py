@@ -69,20 +69,6 @@ def targetDetect(img, threshold=(0, 255)):
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
         
         return contours
-        
-        '''
-        x, y, w, h = cv2.boundingRect(c)  # 将轮廓分解为识别对象的左上角坐标和宽、高
-        # 在图像上画上矩形（图片、左上角坐标、右下角坐标、颜色、线条宽度）
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), thickness=2)
-        
-        cv2.imshow("detectTarget", img)
-        
-        while True:
-            key = chr(cv2.waitKey(15) & 255)
-            if key == 'q':
-                cv2.destroyAllWindows()
-                break
-        '''
 
 if __name__ == '__main__':
     pic_name = "../../jinnan2_round1_test_a_20190222/190119_181533_00166652.jpg"

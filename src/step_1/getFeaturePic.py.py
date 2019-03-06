@@ -38,7 +38,7 @@ def getFeatureMap(json_str, category_id):
 
 if __name__ == '__main__':
     # 仅修改这个值，对应到特征id即可
-    category_id = 1
+    category_id = 5
     category_id_name = "category_id_" + str(category_id)
     
     filename = dir_name + "/train_no_poly.json"

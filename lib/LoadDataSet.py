@@ -70,8 +70,27 @@ def loadDataSet(path):
 	图片为64*64像素，一个像素3个颜色值(RGB)
 	'''
 	images = np.array(images)
-	# 标注数据，'me'文件夹下都是我自己的人脸图片，全部指定为0，另一个文件夹下都是另一个人的，全部指定为1
-	labels = np.array([0 if label.endswith('category_id_1_feature_gray') else 1 for label in labels])
+	
+	lbs = np.array([])
+	for i in range(0, len(labels)):
+		label = labels[i]
+		
+		if label.endswith('category_id_1_feature'):
+			labels[i] = 0
+		elif label.endswith('category_id_2_feature'):
+			labels[i] = 1
+		elif label.endswith('category_id_3_feature'):
+			labels[i] = 2
+		elif label.endswith('category_id_4_feature'):
+			labels[i] = 3
+		elif label.endswith('category_id_5_feature'):
+			labels[i] = 4
+		# else:
+		# 	labels[i] = 1
+			
+	labels = np.array(labels)
+	
+	# labels = np.array([0 if label.endswith('category_id_1_feature_gray') else 1 for label in labels])
 
 	return images, labels
 
