@@ -31,8 +31,12 @@ class Submit:
         return image_lst
 
     def getSubmitJson(self, img_name, sub):
+        obj = {}
         if len(sub):
-            self.submit_json["results"].append(sub)
+            obj = {"filename":img_name, "rects":sub}
+            self.submit_json["results"].append(obj)
+
+        return obj
 
     def get(self):
         print(self.submit_json)

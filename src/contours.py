@@ -48,14 +48,19 @@ def targetDetect(img, threshold=(0, 255)):
             erosion： 腐蚀
             dilation： 膨胀
         '''
-        erosion = cv2.erode(mask, kernel, iterations=1)
-        erosion = cv2.erode(erosion, kernel, iterations=1)
-        dilation = cv2.dilate(erosion, kernel, iterations=1)
-        dilation = cv2.dilate(dilation, kernel, iterations=1)
+        # erosion = cv2.erode(mask, kernel, iterations=1)
+        # erosion = cv2.erode(erosion, kernel, iterations=1)
+        # dilation = cv2.dilate(erosion, kernel, iterations=1)
+        # dilation = cv2.dilate(dilation, kernel, iterations=1)
         
         # target是把原图中的非目标颜色区域去掉剩下的图像
-        target = cv2.bitwise_and(img, img, mask=dilation)
-        
+        target = cv2.bitwise_and(img, img, mask=mask)
+
+        # cv2.imshow("image", img)
+        # cv2.imshow("mask", mask)
+        # cv2.imshow("target", target)
+        # cv2.waitKey(0)
+
         dilation = edge(target)
         
         ret, binary = cv2.threshold(dilation, low, high, cv2.THRESH_BINARY)

@@ -117,7 +117,7 @@ def test():
 
 if __name__ == '__main__':
     # test()
-    model_path = "./step_2/cnnmodel.h5"
+    model_path = "../src/step_2/cnnmodel.h5"
     
     # 加载模型
     model = CNNModel()
@@ -125,9 +125,14 @@ if __name__ == '__main__':
 
     dir_name = "../../jinnan2_round1_test_a_20190222/"
     submit = submit.Submit()
-    image_lst = submit.getAllPictures(dir_name)[0]      # 获取测试集目录下所有的图片文件名
+    # image_lst = submit.getAllPictures(dir_name)[0]      # 获取测试集目录下所有的图片文件名
 
-    empty_imgs = []
+    image_lst = []
+    with open("empty_imgs.txt", "r+") as fd:
+        lines = fd.readlines()
+        for line in lines:
+            image_lst.append(line.strip("\n"))
+
     i = 0
     for image in image_lst:     # 读取所有图片
         i += 1
@@ -138,25 +143,17 @@ if __name__ == '__main__':
 
         # 高斯滤波,降低噪声
         blur = cv2.GaussianBlur(img, (3, 3), 0)
-        contours_set = contours.targetDetect(img, (100, 255))
+        contours_set = contours.targetDetect(img, (100, 200))
 
         sub = findMaxProb(contours_set)        # 找到图中预测各类别概率的最大值，并返回为list
         # print(sub)
         # prob_lst = list(np.array(prob_lst, dtype=np.float))
         # print(prob_lst)
         obj = submit.getSubmitJson(image, sub)
-        if not len(obj):
-            empty_imgs.append(image)
-    #     # imgShow(img, c)
-    #
+        # imgShow(img, c)
+
         print('第 %d 张图片' % i, "------", obj)
     #
     print(submit.get())
     submit.save()
-
-    string = ""
-    for img_ in empty_imgs:
-        string += img_ + "\n"
-    with open("empty_imgs.txt", "w+") as fd:
-        fd.write(string)
         

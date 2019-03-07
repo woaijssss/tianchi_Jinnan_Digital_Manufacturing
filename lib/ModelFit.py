@@ -177,7 +177,7 @@ class CNNModel:
 
 		# 给出输入属于各个类别的概率，我们是二值类别，则该函数会给出输入图像属于0和1的概率各位多少
 		result = self.model.predict_proba(image)
-		print('result: ', result)
+		# print('result: ', result)
 
 		# 给出类别预测：0或1
 		id = self.model.predict_classes(image)
