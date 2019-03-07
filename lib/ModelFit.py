@@ -29,7 +29,7 @@ class CNNModel:
 		))
 		self.model.add(Activation('relu'))					# 激活函数层
 		self.model.add(Conv2D(32, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
+		# self.model.add(Activation('relu'))					# 激活函数层
 
 		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
 		# self.model.add(Dropout(0.25))							# Dropout层
