@@ -37,8 +37,10 @@ def targetDetect(img, threshold=(0, 255)):
         '''
             RGB图像过滤通道
         '''
-        lower = np.array([50, 100, 10])  # 要识别颜色的下限
-        upper = np.array([220, 200, 200])  # 要识别颜色的上限
+        lower = np.array([50, 100, 50])  # 要识别颜色的下限
+        upper = np.array([220, 200, 150])  # 要识别颜色的上限
+        # lower = np.array([low, low, low])  # 要识别颜色的下限
+        # upper = np.array([high, high, high])  # 要识别颜色的上限
         
         # mask是把HSV图片中在颜色范围内的区域变成白色，其他区域变成黑色
         mask = cv2.inRange(img, lower, upper)

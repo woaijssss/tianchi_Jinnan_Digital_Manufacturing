@@ -41,6 +41,7 @@ def findMaxProb(contours_set):
     prob_lst = []
     prob = []
     contour_list = []
+    print('contours_set len: ', len(contours_set))
     for c in contours_set:          # 遍历每个轮廓
         x, y, w, h = cv2.boundingRect(c)
         img_tmp = blur[y:y+h+10, x:x+w+10]
@@ -123,7 +124,7 @@ if __name__ == '__main__':
     model = CNNModel()
     model.loadModel(path=model_path)
 
-    dir_name = "../../jinnan2_round1_test_a_20190222/"
+    dir_name = "../../jinnan2_round1_test_a_20190306/"
     submit = submit.Submit()
     # image_lst = submit.getAllPictures(dir_name)[0]      # 获取测试集目录下所有的图片文件名
 
@@ -156,4 +157,25 @@ if __name__ == '__main__':
     #
     print(submit.get())
     submit.save()
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
