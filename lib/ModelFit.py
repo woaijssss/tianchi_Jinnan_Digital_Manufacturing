@@ -7,8 +7,14 @@ from keras.layers import MaxPooling2D, Conv2D
 from keras.optimizers import SGD
 from keras.models import load_model
 from keras import backend as K
+from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from keras import regularizers
+from keras.applications import resnet50
+
+from keras.utils.training_utils import multi_gpu_model   #导入keras多GPU函数
 
 from lib.LoadDataSet import resizeImg, IMAGE_SIZE
+from tensorflow.python.client import device_lib
 
 # CNN网络模型类
 class CNNModel:
@@ -22,51 +28,101 @@ class CNNModel:
 		# 专称：序贯模型或线性堆叠模型:多个网络层的线性堆叠，也就是“一条路走到黑”。
 		self.model = Sequential()
 
-		# 顺序添加CNN网络需要的各层，一个add就是一个网络层
-		self.model.add(Conv2D(									# 2维卷积层
-			32, (3, 3), padding='same',
-			input_shape=data_set.input_shape
-		))
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(Conv2D(32, (3, 3)))						# 2维卷积层
-		# self.model.add(Activation('relu'))					# 激活函数层
-
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		# self.model.add(Dropout(0.25))							# Dropout层
-
-		self.model.add(Conv2D(64, (3, 3), padding='same'))	# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
+		weight_decay = 0.0005
+		nb_epoch = 100
+		batch_size = 32
 
 		##########################################################################
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		self.model.add(Conv2D(64, (3, 3)))						# 2维卷积层
-		self.model.add(Activation('relu'))					# 激活函数层
-		##########################################################################
-
-		self.model.add(MaxPooling2D(pool_size=(2, 2)))		# 池化层
-		# self.model.add(Dropout(0.25))							# Dropout层
-
+		# 第一个 卷积层 的卷积核的数目是32 ，卷积核的大小是3*3，stride没写，默认应该是1*1
+		# 对于stride=1*1,并且padding ='same',这种情况卷积后的图像shape与卷积前相同，本层后shape还是32*32
+		self.model.add(Conv2D(64, (3, 3), padding='same',
+						 input_shape=data_set.input_shape, kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		# 进行一次归一化
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.3))
+		# layer2 32*32*64
+		self.model.add(Conv2D(64, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		# 下面两行代码是等价的，#keras Pool层有个奇怪的地方，stride,默认是(2*2),
+		# padding默认是valid，在写代码是这些参数还是最好都加上,这一步之后,输出的shape是16*16*64
+		# model.add(MaxPooling2D(pool_size=(2, 2)))
+		self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same'))
+		# layer3 16*16*64
+		self.model.add(Conv2D(128, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer4 16*16*128
+		self.model.add(Conv2D(128, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))
+		# layer5 8*8*128
+		self.model.add(Conv2D(256, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer6 8*8*256
+		self.model.add(Conv2D(256, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer7 8*8*256
+		self.model.add(Conv2D(256, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))
+		# layer8 4*4*256
+		self.model.add(Conv2D(512, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer9 4*4*512
+		self.model.add(Conv2D(512, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer10 4*4*512
+		self.model.add(Conv2D(512, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))
+		# layer11 2*2*512
+		self.model.add(Conv2D(512, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer12 2*2*512
+		self.model.add(Conv2D(512, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(Dropout(0.4))
+		# layer13 2*2*512
+		self.model.add(Conv2D(512, (3, 3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		self.model.add(MaxPooling2D(pool_size=(2, 2)))
+		self.model.add(Dropout(0.5))
+		# layer14 1*1*512
 		'''
 		flatten:是把池化层展开以便作为全连接层的输入。
 		"展开"即：指的是将一个(m, n)的池化后的矩阵，转化为(m*n, 1)的矩阵。
 		'''
-		self.model.add(Flatten())								# Flatten层(拉伸操作，相当于FC的输入层)
-		self.model.add(Dense(1024))								# Dense层，又称为(FC)全连接层
-		self.model.add(Activation('relu'))					# 激活函数层
-		self.model.add(Dropout(0.5))							# Dropout层
-		self.model.add(Dense(nb_classes))						# Dense层
-		self.model.add(Activation('softmax'))					# 分类层，输出最终结果
+		self.model.add(Flatten())
+		self.model.add(Dense(512, kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		# layer15 512
+		self.model.add(Dense(512, kernel_regularizer=regularizers.l2(weight_decay)))
+		self.model.add(Activation('relu'))
+		self.model.add(BatchNormalization())
+		# layer16 512
+		self.model.add(Dropout(0.5))
+		self.model.add(Dense(nb_classes))
+		self.model.add(Activation('softmax'))
+		##########################################################################
 
 		# 输出模型的情况
 		'''
@@ -86,7 +142,7 @@ class CNNModel:
 	'''
 	:param nb_epoch:训练轮数
 	'''
-	def trainModel(self, data_set, batch_size=20, nb_epoch=10, data_arg=True):
+	def trainModel(self, data_set, batch_size=20, nb_epoch=1, data_arg=True):
 		# 采用SGD+momentum的优化器进行训练，首先生成一个优化器对象
 		sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 		self.model.compile(loss='categorical_crossentropy',	# 损失函数
