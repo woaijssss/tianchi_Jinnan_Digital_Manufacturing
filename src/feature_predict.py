@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
         # 高斯滤波,降低噪声
         blur = cv2.GaussianBlur(img, (3, 3), 0)
-        contours_set = contours.targetDetect(img, (100, 200))
+        contours_set = contours.targetDetect(img, (50, 200))
 
         sub = findMaxProb(contours_set)        # 找到图中预测各类别概率的最大值，并返回为list
         # print(sub)
