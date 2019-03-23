@@ -9,7 +9,7 @@
       "id": 1,              // 序号
       "image_id": 0,        // 对应于"images"中的id
       "category_id": 1,     // 对应于"categories"中的id
-      "iscrowd": 0,         // 是否是人群？（待确认）
+      "iscrowd": 0,         // 是否是一个群体(比如剪刀就是多巴剪刀聚在一起)
       "segmentation": [     // 初赛为空
 
       ],
